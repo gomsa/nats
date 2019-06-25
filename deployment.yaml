@@ -1,0 +1,61 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: nats
+  namespace: srv
+spec:
+  selector:
+    app: nats
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 8080
+      name: micro
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nats
+  namespace: srv
+  labels:
+    app: nats
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nats
+  template:
+    metadata:
+      labels:
+        app: nats
+    spec:
+      imagePullSecrets:
+      - name: pipeline-docker-registry
+      containers:
+        - name: nats
+          image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
+          imagePullPolicy: Always
+          command: [
+            "service",
+            "--selector=static",
+            "--server_address=:8080",
+          ]
+          ports:
+          - containerPort: 8080
+            name: micro
+            protocol: TCP
+        - name: health
+          image: microhq/health:kubernetes
+          command: [
+            "/health",
+            "--health_address=0.0.0.0:8081",
+            "--server_name=nats",
+            "--server_address=0.0.0.0:8080"
+          ]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3
