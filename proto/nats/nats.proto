@@ -8,14 +8,14 @@ service Nats {
 
     // 获取权限列表
     rpc List(ListQuery) returns (Response) {}
-    // 根据 唯一 获取权限
-    rpc Get(nat) returns (Response) {}
-    // 创建权限
-    rpc Create(nat) returns (Response) {}
-    // 更新权限
-    rpc Update(nat) returns (Response) {}
-    // 删除权限
-    rpc Delete(nat) returns (Response) {}
+    // 根据 唯一 获取模板
+    rpc Get(template) returns (Response) {}
+    // 创建模板
+    rpc Create(template) returns (Response) {}
+    // 更新模板
+    rpc Update(template) returns (Response) {}
+    // 删除模板
+    rpc Delete(template) returns (Response) {}
 }
 
 message ListQuery{
@@ -26,17 +26,18 @@ message ListQuery{
     string name = 5;
 }
 
-message nat{
+message template{
     string name = 1; // 事件名称 方法 比如发短信 发邮件
     string templateCode = 2; //模板代码
     string templateValue = 3;   // 模板的值
+    bool default = 4; //默然模板
 }
 
 message Request {
     // 驱动
     string driver = 1;
-    // 调用的方法
-    string apiName = 2;
+    // 事件实现方法 比如 手机、邮件
+    string eventType = 2;
     // 消息方法 一般会自动一个默然模板 也可以后台设置默然模板
     string templateCode = 3;
     // 消息参数 验证码 rul 等参数
