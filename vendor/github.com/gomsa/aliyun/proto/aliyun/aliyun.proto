@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package aliyun;
+
+service Aliyun {
+    // 处理请求
+    rpc ProcessCommonRequest(Request) returns (Response) {}
+}
+
+
+message Request{
+    string Method = 1;
+    string Scheme = 2;
+    string Domain = 3;
+    string Version = 5;
+    string ApiName = 6;
+    map<string, string> QueryParams = 7;
+}
+
+message Response {
+    string Content = 1;
+}
