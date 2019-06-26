@@ -9,13 +9,13 @@ service Nats {
     // 获取权限列表
     rpc List(ListQuery) returns (Response) {}
     // 根据 唯一 获取模板
-    rpc Get(template) returns (Response) {}
+    rpc Get(event) returns (Response) {}
     // 创建模板
-    rpc Create(template) returns (Response) {}
+    rpc Create(event) returns (Response) {}
     // 更新模板
-    rpc Update(template) returns (Response) {}
+    rpc Update(event) returns (Response) {}
     // 删除模板
-    rpc Delete(template) returns (Response) {}
+    rpc Delete(event) returns (Response) {}
 }
 
 message ListQuery{
@@ -26,22 +26,20 @@ message ListQuery{
     string name = 5;
 }
 
-message template{
-    string name = 1; // 事件名称 方法 比如发短信 发邮件
-    string templateCode = 2; //模板代码
-    string templateValue = 3;   // 模板的值
-    bool default = 4; //默然模板
+message event{
+    string name = 1;                // 事件名称 方法 比如发短信 发邮件
+    string event = 2;               // 事件 注册信息 登录信息
+    string templateValue = 3;       // 模板
+    repeated string type= 4;        // 默认实现事件的类型 sms email wechat ...
 }
 
 message Request {
-    // 驱动
-    string driver = 1;
-    // 事件实现方法 比如 手机、邮件
-    string eventType = 2;
-    // 消息方法 一般会自动一个默然模板 也可以后台设置默然模板
-    string templateCode = 3;
+    // 留空调用模板默认设置 默认实现事件的类型 sms email wechat ...
+    repeated string type= 1;
+    // 事件
+    string event = 2;
     // 消息参数 验证码 rul 等参数
-    map<string, string> queryParams = 4;
+    map<string, string> queryParams = 3;
 }
 
 message Response {
