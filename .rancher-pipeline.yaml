@@ -15,6 +15,18 @@ stages:
       dockerfilePath: ./rancher/Dockerfile
       buildContext: .
       tag: nats:${CICD_EXECUTION_SEQUENCE}
+- name: Mariadb
+  steps:
+  - applyAppConfig:
+      catalogTemplate: cattle-global-data:library-mariadb
+      version: 5.0.9
+      answers:
+        db.name: nats
+        db.user: nats
+        service.type: ClusterIP
+        slave.replicas: "2"
+      name: nats-mariadb
+      targetNamespace: srv
 - name: Deploy
   steps:
   - applyYamlConfig:

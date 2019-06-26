@@ -9,13 +9,13 @@ service Nats {
     // 获取权限列表
     rpc List(ListQuery) returns (Response) {}
     // 根据 唯一 获取模板
-    rpc Get(event) returns (Response) {}
+    rpc Get(Nat) returns (Response) {}
     // 创建模板
-    rpc Create(event) returns (Response) {}
+    rpc Create(Nat) returns (Response) {}
     // 更新模板
-    rpc Update(event) returns (Response) {}
+    rpc Update(Nat) returns (Response) {}
     // 删除模板
-    rpc Delete(event) returns (Response) {}
+    rpc Delete(Nat) returns (Response) {}
 }
 
 message ListQuery{
@@ -26,11 +26,13 @@ message ListQuery{
     string name = 5;
 }
 
-message event{
-    string name = 1;                // 事件名称 方法 比如发短信 发邮件
+message Nat{
+    int64 id = 1;
     string event = 2;               // 事件 注册信息 登录信息
-    string templateValue = 3;       // 模板
+    string name = 3;                // 事件名称 方法 比如发短信 发邮件
     repeated string type= 4;        // 默认实现事件的类型 sms email wechat ...
+    string templateCode = 5;        // 模板代码 用于一些不能是使用自制模板的服务商
+    string templateValue = 6;       // 模板
 }
 
 message Request {
@@ -38,10 +40,13 @@ message Request {
     repeated string type= 1;
     // 事件
     string event = 2;
-    // 消息参数 验证码 rul 等参数
+    // 消息参数 验证码 等参数
     map<string, string> queryParams = 3;
 }
 
 message Response {
-    bool valid = 1;
+    Nat nat = 1;
+    repeated Nat nats = 2;
+    int64 total = 3;
+    bool valid = 4;
 }

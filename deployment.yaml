@@ -41,6 +41,18 @@ spec:
             "--selector=static",
             "--server_address=:8080",
           ]
+          env:
+            - name: DB_HOST
+              value: "nats-mariadb"
+            - name: DB_USER
+              value: "nats"
+            - name: DB_NAME
+              value: "nats"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mariadb-password
+                  name: nats-mariadb
           ports:
           - containerPort: 8080
             name: micro
