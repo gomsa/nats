@@ -3,9 +3,6 @@ package hander
 import (
 	"context"
 	"fmt"
-	
-	aliPB "github.com/gomsa/aliyun/proto/aliyun"
-	aliyunClient "github.com/gomsa/aliyun/client"
 
 	pb "github.com/gomsa/nats/proto/nats"
 	"github.com/gomsa/nats/service"
@@ -14,30 +11,20 @@ import (
 // Nats 消息事件结构
 type Nats struct {
 	Repo service.Repository
-	Sms service.Sms
+	Sms  service.Sms
 }
 
 // ProcessCommonRequest 处理公共请求
 func (srv *Nats) ProcessCommonRequest(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
-	aliyunReq := aliPB.Request{
-		Method: "POST",
-		Scheme: "https",
-		Domain: "dysmsapi.aliyuncs.com",
-		Version: "2017-05-25",
-		ApiName: "SendSms",
-		QueryParams: {
-			"PhoneNumbers":"13954386521",
-			"SignName":"阿里云",
-			"TemplateCode":"SMS_135275049",
-			"TemplateParam":"{code: '562374'}"
-		}
-	}
-	aliyunRes, err :=aliyunClient.ProcessCommonRequest(ctx, aliyunReq)
-	if err != nil {
-		return err
-	}
-	fmt.Println(aliyunRes.Context)
+	srv.drive(req.Type)
 	return
+}
+
+func (srv *Nats) drive(Type string) {
+	switch Type {
+	case 'sms':
+		srv.Sms = 
+	}
 }
 
 // List 获取所有消息事件
