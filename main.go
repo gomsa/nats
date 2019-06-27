@@ -6,7 +6,8 @@ import (
 	"github.com/micro/go-micro/util/log"
 	k8s "github.com/micro/kubernetes/go/micro"
 
-	pb "github.com/gomsa/nats/proto/nats"
+	npb "github.com/gomsa/nats/proto/nats"
+	tpb "github.com/gomsa/nats/proto/template"
 	db "github.com/gomsa/nats/providers/database"
 	"github.com/gomsa/nats/hander"
 	"github.com/gomsa/nats/service"
@@ -20,8 +21,11 @@ func main() {
 	srv.Init()
 
 	// 消息事件服务实现
-	repo := &service.NatsRepository{db.DB}
-	pb.RegisterNatsHandler(srv.Server(), &hander.Nats{repo})
+	nrepo := &service.SmsHandler{"aliyun"}
+	npb.RegisterNatsHandler(srv.Server(), &hander.Nats{nrepo.NewHandler()})
+
+	trepo := &service.TemplateRepository{db.DB}
+	tpb.RegisterTemplatesHandler(srv.Server(), &hander.Template{trepo})
 	// Run the server
 	if err := srv.Run(); err != nil {
 		log.Log(err)

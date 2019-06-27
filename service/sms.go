@@ -3,41 +3,34 @@ package service
 import (
 	// 公共引入
 
-	aliPB "github.com/gomsa/aliyun/proto/aliyun"
-	aliyunClient "github.com/gomsa/aliyun/client"
+	"github.com/gomsa/tools/env"
 
 	pb "github.com/gomsa/nats/proto/nats"
+
+	"github.com/gomsa/nats/service/sms"
 )
 
 //Sms 短信发送接口
 type Sms interface {
-	Send(role *pb.Request) (*pb.Response, error)
+	Send(*pb.Request) (*pb.Response, error)
+	Event(*pb.Request)
 }
 
-// NatsRepository 消息事件仓库
-type AliyunSms struct {
+// SmsHandler sms 驱动
+type SmsHandler struct {
+	Drive string
 }
 
-// List 获取所有消息事件信息
-func (repo *AliyunSms) Send(req *pb.Request) (res *pb.Response, err error) {
-
-	aliyunReq := aliPB.Request{
-		Method: "POST",
-		Scheme: "https",
-		Domain: "dysmsapi.aliyuncs.com",
-		Version: "2017-05-25",
-		ApiName: "SendSms",
-		QueryParams: {
-			"PhoneNumbers":"13954386521",
-			"SignName":"阿里云",
-			"TemplateCode":"SMS_135275049",
-			"TemplateParam":"{code: '562374'}"
+// NewHandler 使用对应驱动使用 sms
+func (s *SmsHandler) NewHandler() (handler Sms) {
+	switch s.Drive {
+	case "aliyun":
+		handler = &sms.Aliyun{
+			RegionId:        "default",
+			AccessKeyId:     env.Getenv("SMS_KEY_ID", ""),
+			AccessKeySecret: env.Getenv("SMS_KEY_SECRET", ""),
+			SignName:        env.Getenv("SMS_SIGN_NAME", "阿里云短信测试专用"),
 		}
 	}
-	aliyunRes, err :=aliyunClient.ProcessCommonRequest(ctx, aliyunReq)
-	if err != nil {
-		return err
-	}
-	fmt.Println(aliyunRes.Context)
-	return nil, nil
+	return handler
 }

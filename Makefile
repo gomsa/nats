@@ -8,3 +8,6 @@ dev:
 
 build:
 	protoc -I . --go_out=plugins=micro:. proto/nats/nats.proto
+	protoc -I . --go_out=plugins=micro:. proto/template/template.proto
+	protoc -I . --go_out=plugins=micro:. proto/template/template.proto
+	

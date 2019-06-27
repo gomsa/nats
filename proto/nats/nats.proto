@@ -5,49 +5,19 @@ package nats;
 service Nats {
     // 共处理方法
     rpc ProcessCommonRequest(Request) returns (Response) {}
-
-    // 获取权限列表
-    rpc List(ListQuery) returns (Response) {}
-    // 根据 唯一 获取模板
-    rpc Get(Nat) returns (Response) {}
-    // 创建模板
-    rpc Create(Nat) returns (Response) {}
-    // 更新模板
-    rpc Update(Nat) returns (Response) {}
-    // 删除模板
-    rpc Delete(Nat) returns (Response) {}
 }
-
-message ListQuery{
-    int64 limit=1; //返回数量
-    int64 page=2; //页面
-    string sort=3; // 排序
-    string label = 4;
-    string name = 5;
-}
-
-message Nat{
-    int64 id = 1;
-    string event = 2;               // 事件 注册信息 登录信息
-    string name = 3;                // 事件名称 方法 比如发短信 发邮件
-    string drive = 4;
-    repeated string type= 5;        // 默认实现事件的类型 sms email wechat ...
-    string templateCode = 6;        // 模板代码 用于一些不能是使用自制模板的服务商
-    string templateValue = 7;       // 模板
-}
-
 message Request {
-    // 留空调用模板默认设置 默认实现事件的类型 sms email wechat ...
-    repeated string type= 1;
-    // 事件
+    // 手机号 email 微信号 等等消息接收方
+    string addressee= 1;
+    // 事件 配套魔板 默认发送方式
     string event = 2;
-    // 消息参数 验证码 等参数
-    map<string, string> queryParams = 3;
+    // 留空调用模板默认设置 默认实现事件的类型 sms email wechat ...
+    repeated string type= 3;
+    // 消息参数 验证码 等魔板参数参数
+    map<string, string> queryParams = 4;
 }
 
 message Response {
-    Nat nat = 1;
-    repeated Nat nats = 2;
-    int64 total = 3;
-    bool valid = 4;
+    bool valid = 1;
+    string message = 2;
 }

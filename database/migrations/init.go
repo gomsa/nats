@@ -1,21 +1,21 @@
 package migrations
 
 import (
-	pd "github.com/gomsa/nats/proto/nats"
+	pd "github.com/gomsa/nats/proto/template"
 	db "github.com/gomsa/nats/providers/database"
 )
 
 func init() {
-	nat()
+	template()
 	seeds()
 }
 
 // user 用户数据迁移
-func nat() {
-	nat := &pd.Nat{}
-	if !db.DB.HasTable(&nat) {
+func template() {
+	template := &pd.Template{}
+	if !db.DB.HasTable(&template) {
 		db.DB.Exec(`
-			CREATE TABLE nats (
+			CREATE TABLE templates (
 			id int(11) unsigned NOT NULL AUTO_INCREMENT,	
 			event varchar(32) NOT NULL,
 			name varchar(64) DEFAULT NULL,
@@ -36,6 +36,6 @@ func nat() {
 // seeds 填充文件
 func seeds() {
 	db.DB.Exec(`
-		INSERT INTO nats ( event, name, type, templateCode, templateValue ) VALUES ('register_verify','用户注册验证码','sms','SMS_135275049','')
+		INSERT INTO templates ( event, name, type, templateCode, templateValue ) VALUES ('register_verify','用户注册验证码','sms','SMS_135275049','')
 	`)
 }

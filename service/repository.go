@@ -4,7 +4,7 @@ import (
 	"fmt"
 	// 公共引入
 
-	pb "github.com/gomsa/nats/proto/nats"
+	pb "github.com/gomsa/nats/proto/template"
 	"github.com/micro/go-micro/util/log"
 
 	"github.com/jinzhu/gorm"
@@ -12,21 +12,21 @@ import (
 
 //Repository 仓库接口
 type Repository interface {
-	Create(role *pb.Nat) (*pb.Nat, error)
-	Delete(role *pb.Nat) (bool, error)
-	Update(role *pb.Nat) (bool, error)
-	Get(role *pb.Nat) (*pb.Nat, error)
-	List(req *pb.ListQuery) ([]*pb.Nat, error)
+	Create(role *pb.Template) (*pb.Template, error)
+	Delete(role *pb.Template) (bool, error)
+	Update(role *pb.Template) (bool, error)
+	Get(role *pb.Template) (*pb.Template, error)
+	List(req *pb.ListQuery) ([]*pb.Template, error)
 	Total(req *pb.ListQuery) (int64, error)
 }
 
-// NatsRepository 消息事件仓库
-type NatsRepository struct {
+// TemplateRepository 消息事件仓库
+type TemplateRepository struct {
 	DB *gorm.DB
 }
 
 // List 获取所有消息事件信息
-func (repo *NatsRepository) List(req *pb.ListQuery) (roles []*pb.Nat, err error) {
+func (repo *TemplateRepository) List(req *pb.ListQuery) (roles []*pb.Template, err error) {
 	db := repo.DB
 	// 分页
 	var limit, offset int64
@@ -60,8 +60,8 @@ func (repo *NatsRepository) List(req *pb.ListQuery) (roles []*pb.Nat, err error)
 }
 
 // Total 获取所有消息事件查询总量
-func (repo *NatsRepository) Total(req *pb.ListQuery) (total int64, err error) {
-	roles := []pb.Nat{}
+func (repo *TemplateRepository) Total(req *pb.ListQuery) (total int64, err error) {
+	roles := []pb.Template{}
 	db := repo.DB
 	// 查询条件
 	if req.Label != "" {
@@ -75,7 +75,7 @@ func (repo *NatsRepository) Total(req *pb.ListQuery) (total int64, err error) {
 }
 
 // Get 获取消息事件信息
-func (repo *NatsRepository) Get(r *pb.Nat) (*pb.Nat, error) {
+func (repo *TemplateRepository) Get(r *pb.Template) (*pb.Template, error) {
 	if r.Id != 0 {
 		if err := repo.DB.Model(&r).Where("id = ?", r.Id).Find(&r).Error; err != nil {
 			return nil, err
@@ -96,7 +96,7 @@ func (repo *NatsRepository) Get(r *pb.Nat) (*pb.Nat, error) {
 
 // Create 创建消息事件
 // bug 无消息事件名创建消息事件可能引起 bug
-func (repo *NatsRepository) Create(r *pb.Nat) (*pb.Nat, error) {
+func (repo *TemplateRepository) Create(r *pb.Template) (*pb.Template, error) {
 	err := repo.DB.Create(r).Error
 	if err != nil {
 		// 写入数据库未知失败记录
@@ -107,11 +107,11 @@ func (repo *NatsRepository) Create(r *pb.Nat) (*pb.Nat, error) {
 }
 
 // Update 更新消息事件
-func (repo *NatsRepository) Update(r *pb.Nat) (bool, error) {
+func (repo *TemplateRepository) Update(r *pb.Template) (bool, error) {
 	if r.Id == 0 {
 		return false, fmt.Errorf("请传入更新id")
 	}
-	id := &pb.Nat{
+	id := &pb.Template{
 		Id: r.Id,
 	}
 	err := repo.DB.Model(id).Updates(r).Error
@@ -123,7 +123,7 @@ func (repo *NatsRepository) Update(r *pb.Nat) (bool, error) {
 }
 
 // Delete 删除消息事件
-func (repo *NatsRepository) Delete(r *pb.Nat) (bool, error) {
+func (repo *TemplateRepository) Delete(r *pb.Template) (bool, error) {
 	err := repo.DB.Delete(r).Error
 	if err != nil {
 		log.Log(err)

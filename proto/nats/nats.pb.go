@@ -26,163 +26,15 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-type ListQuery struct {
-	Limit                int64    `protobuf:"varint,1,opt,name=limit,proto3" json:"limit,omitempty"`
-	Page                 int64    `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
-	Sort                 string   `protobuf:"bytes,3,opt,name=sort,proto3" json:"sort,omitempty"`
-	Label                string   `protobuf:"bytes,4,opt,name=label,proto3" json:"label,omitempty"`
-	Name                 string   `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *ListQuery) Reset()         { *m = ListQuery{} }
-func (m *ListQuery) String() string { return proto.CompactTextString(m) }
-func (*ListQuery) ProtoMessage()    {}
-func (*ListQuery) Descriptor() ([]byte, []int) {
-	return fileDescriptor_86369f7f3ad51865, []int{0}
-}
-
-func (m *ListQuery) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ListQuery.Unmarshal(m, b)
-}
-func (m *ListQuery) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ListQuery.Marshal(b, m, deterministic)
-}
-func (m *ListQuery) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListQuery.Merge(m, src)
-}
-func (m *ListQuery) XXX_Size() int {
-	return xxx_messageInfo_ListQuery.Size(m)
-}
-func (m *ListQuery) XXX_DiscardUnknown() {
-	xxx_messageInfo_ListQuery.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ListQuery proto.InternalMessageInfo
-
-func (m *ListQuery) GetLimit() int64 {
-	if m != nil {
-		return m.Limit
-	}
-	return 0
-}
-
-func (m *ListQuery) GetPage() int64 {
-	if m != nil {
-		return m.Page
-	}
-	return 0
-}
-
-func (m *ListQuery) GetSort() string {
-	if m != nil {
-		return m.Sort
-	}
-	return ""
-}
-
-func (m *ListQuery) GetLabel() string {
-	if m != nil {
-		return m.Label
-	}
-	return ""
-}
-
-func (m *ListQuery) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
-
-type Nat struct {
-	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Event                string   `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`
-	Name                 string   `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
-	Type                 []string `protobuf:"bytes,4,rep,name=type,proto3" json:"type,omitempty"`
-	TemplateCode         string   `protobuf:"bytes,5,opt,name=templateCode,proto3" json:"templateCode,omitempty"`
-	TemplateValue        string   `protobuf:"bytes,6,opt,name=templateValue,proto3" json:"templateValue,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *Nat) Reset()         { *m = Nat{} }
-func (m *Nat) String() string { return proto.CompactTextString(m) }
-func (*Nat) ProtoMessage()    {}
-func (*Nat) Descriptor() ([]byte, []int) {
-	return fileDescriptor_86369f7f3ad51865, []int{1}
-}
-
-func (m *Nat) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Nat.Unmarshal(m, b)
-}
-func (m *Nat) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Nat.Marshal(b, m, deterministic)
-}
-func (m *Nat) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Nat.Merge(m, src)
-}
-func (m *Nat) XXX_Size() int {
-	return xxx_messageInfo_Nat.Size(m)
-}
-func (m *Nat) XXX_DiscardUnknown() {
-	xxx_messageInfo_Nat.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Nat proto.InternalMessageInfo
-
-func (m *Nat) GetId() int64 {
-	if m != nil {
-		return m.Id
-	}
-	return 0
-}
-
-func (m *Nat) GetEvent() string {
-	if m != nil {
-		return m.Event
-	}
-	return ""
-}
-
-func (m *Nat) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
-
-func (m *Nat) GetType() []string {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (m *Nat) GetTemplateCode() string {
-	if m != nil {
-		return m.TemplateCode
-	}
-	return ""
-}
-
-func (m *Nat) GetTemplateValue() string {
-	if m != nil {
-		return m.TemplateValue
-	}
-	return ""
-}
-
 type Request struct {
-	// 留空调用模板默认设置 默认实现事件的类型 sms email wechat ...
-	Type []string `protobuf:"bytes,1,rep,name=type,proto3" json:"type,omitempty"`
-	// 事件
+	// 手机号 email 微信号 等等消息接收方
+	Addressee string `protobuf:"bytes,1,opt,name=addressee,proto3" json:"addressee,omitempty"`
+	// 事件 配套魔板 默认发送方式
 	Event string `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`
-	// 消息参数 验证码 等参数
-	QueryParams          map[string]string `protobuf:"bytes,3,rep,name=queryParams,proto3" json:"queryParams,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// 留空调用模板默认设置 默认实现事件的类型 sms email wechat ...
+	Type []string `protobuf:"bytes,3,rep,name=type,proto3" json:"type,omitempty"`
+	// 消息参数 验证码 等魔板参数参数
+	QueryParams          map[string]string `protobuf:"bytes,4,rep,name=queryParams,proto3" json:"queryParams,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
 	XXX_sizecache        int32             `json:"-"`
@@ -192,7 +44,7 @@ func (m *Request) Reset()         { *m = Request{} }
 func (m *Request) String() string { return proto.CompactTextString(m) }
 func (*Request) ProtoMessage()    {}
 func (*Request) Descriptor() ([]byte, []int) {
-	return fileDescriptor_86369f7f3ad51865, []int{2}
+	return fileDescriptor_86369f7f3ad51865, []int{0}
 }
 
 func (m *Request) XXX_Unmarshal(b []byte) error {
@@ -213,11 +65,11 @@ func (m *Request) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Request proto.InternalMessageInfo
 
-func (m *Request) GetType() []string {
+func (m *Request) GetAddressee() string {
 	if m != nil {
-		return m.Type
+		return m.Addressee
 	}
-	return nil
+	return ""
 }
 
 func (m *Request) GetEvent() string {
@@ -225,6 +77,13 @@ func (m *Request) GetEvent() string {
 		return m.Event
 	}
 	return ""
+}
+
+func (m *Request) GetType() []string {
+	if m != nil {
+		return m.Type
+	}
+	return nil
 }
 
 func (m *Request) GetQueryParams() map[string]string {
@@ -235,10 +94,8 @@ func (m *Request) GetQueryParams() map[string]string {
 }
 
 type Response struct {
-	Nat                  *Nat     `protobuf:"bytes,1,opt,name=nat,proto3" json:"nat,omitempty"`
-	Nats                 []*Nat   `protobuf:"bytes,2,rep,name=nats,proto3" json:"nats,omitempty"`
-	Total                int64    `protobuf:"varint,3,opt,name=total,proto3" json:"total,omitempty"`
-	Valid                bool     `protobuf:"varint,4,opt,name=valid,proto3" json:"valid,omitempty"`
+	Valid                bool     `protobuf:"varint,1,opt,name=valid,proto3" json:"valid,omitempty"`
+	Message              string   `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -248,7 +105,7 @@ func (m *Response) Reset()         { *m = Response{} }
 func (m *Response) String() string { return proto.CompactTextString(m) }
 func (*Response) ProtoMessage()    {}
 func (*Response) Descriptor() ([]byte, []int) {
-	return fileDescriptor_86369f7f3ad51865, []int{3}
+	return fileDescriptor_86369f7f3ad51865, []int{1}
 }
 
 func (m *Response) XXX_Unmarshal(b []byte) error {
@@ -269,27 +126,6 @@ func (m *Response) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Response proto.InternalMessageInfo
 
-func (m *Response) GetNat() *Nat {
-	if m != nil {
-		return m.Nat
-	}
-	return nil
-}
-
-func (m *Response) GetNats() []*Nat {
-	if m != nil {
-		return m.Nats
-	}
-	return nil
-}
-
-func (m *Response) GetTotal() int64 {
-	if m != nil {
-		return m.Total
-	}
-	return 0
-}
-
 func (m *Response) GetValid() bool {
 	if m != nil {
 		return m.Valid
@@ -297,9 +133,14 @@ func (m *Response) GetValid() bool {
 	return false
 }
 
+func (m *Response) GetMessage() string {
+	if m != nil {
+		return m.Message
+	}
+	return ""
+}
+
 func init() {
-	proto.RegisterType((*ListQuery)(nil), "nats.ListQuery")
-	proto.RegisterType((*Nat)(nil), "nats.Nat")
 	proto.RegisterType((*Request)(nil), "nats.Request")
 	proto.RegisterMapType((map[string]string)(nil), "nats.Request.QueryParamsEntry")
 	proto.RegisterType((*Response)(nil), "nats.Response")
@@ -308,34 +149,23 @@ func init() {
 func init() { proto.RegisterFile("proto/nats/nats.proto", fileDescriptor_86369f7f3ad51865) }
 
 var fileDescriptor_86369f7f3ad51865 = []byte{
-	// 429 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x53, 0x4d, 0x8b, 0xd4, 0x40,
-	0x10, 0x35, 0xe9, 0xec, 0xb8, 0xa9, 0x71, 0xd7, 0xa5, 0x59, 0xa1, 0x59, 0x51, 0x86, 0xa0, 0x30,
-	0x5e, 0x46, 0x18, 0x0f, 0x8a, 0x07, 0x11, 0x46, 0xf1, 0x22, 0xc3, 0x6e, 0x83, 0xde, 0x7b, 0x4d,
-	0x21, 0xc1, 0x24, 0x9d, 0xed, 0xae, 0x59, 0x98, 0xb3, 0xbf, 0xc3, 0x9f, 0xe1, 0xff, 0x93, 0xae,
-	0x4e, 0xe6, 0x43, 0x06, 0x76, 0x2f, 0xa1, 0xde, 0xeb, 0xd7, 0xf5, 0x8a, 0x57, 0x1d, 0x78, 0xd2,
-	0x39, 0x4b, 0xf6, 0x75, 0x6b, 0xc8, 0xf3, 0x67, 0xc6, 0x58, 0x66, 0xa1, 0x2e, 0x3c, 0xe4, 0x5f,
-	0x2b, 0x4f, 0x57, 0x2b, 0x74, 0x6b, 0x79, 0x0e, 0x47, 0x75, 0xd5, 0x54, 0xa4, 0x92, 0x49, 0x32,
-	0x15, 0x3a, 0x02, 0x29, 0x21, 0xeb, 0xcc, 0x4f, 0x54, 0x29, 0x93, 0x5c, 0x07, 0xce, 0x5b, 0x47,
-	0x4a, 0x4c, 0x92, 0x69, 0xae, 0xb9, 0xe6, 0xdb, 0xe6, 0x1a, 0x6b, 0x95, 0x31, 0x19, 0x41, 0x50,
-	0xb6, 0xa6, 0x41, 0x75, 0x14, 0x95, 0xa1, 0x2e, 0xfe, 0x24, 0x20, 0x96, 0x86, 0xe4, 0x29, 0xa4,
-	0x55, 0xd9, 0x9b, 0xa5, 0x55, 0x19, 0x3a, 0xe0, 0x2d, 0xb6, 0xc4, 0x56, 0xb9, 0x8e, 0x60, 0xd3,
-	0x41, 0x6c, 0x3b, 0x04, 0x8e, 0xd6, 0x1d, 0xaa, 0x6c, 0x22, 0x02, 0x17, 0x6a, 0x59, 0xc0, 0x23,
-	0xc2, 0xa6, 0xab, 0x0d, 0xe1, 0xc2, 0x96, 0x83, 0xe3, 0x1e, 0x27, 0x5f, 0xc0, 0xc9, 0x80, 0xbf,
-	0x9b, 0x7a, 0x85, 0x6a, 0xc4, 0xa2, 0x7d, 0xb2, 0xf8, 0x9b, 0xc0, 0x43, 0x8d, 0x37, 0x2b, 0xf4,
-	0xb4, 0x71, 0x4a, 0x76, 0x9c, 0x0e, 0xcf, 0xf9, 0x11, 0xc6, 0x37, 0x21, 0xc6, 0x4b, 0xe3, 0x4c,
-	0xe3, 0x95, 0x98, 0x88, 0xe9, 0x78, 0xfe, 0x7c, 0xc6, 0x91, 0xf7, 0xdd, 0x66, 0x57, 0x5b, 0xc1,
-	0xe7, 0x96, 0xdc, 0x5a, 0xef, 0x5e, 0xb9, 0xf8, 0x00, 0x67, 0xff, 0x0b, 0xe4, 0x19, 0x88, 0x5f,
-	0xb8, 0xe6, 0x90, 0x72, 0x1d, 0xca, 0xe0, 0x7e, 0xcb, 0xb3, 0xf7, 0xee, 0x0c, 0xde, 0xa7, 0xef,
-	0x92, 0xc2, 0xc1, 0xb1, 0x46, 0xdf, 0xd9, 0xd6, 0xa3, 0x7c, 0x0a, 0xa2, 0x35, 0x71, 0x93, 0xe3,
-	0x79, 0x1e, 0xa7, 0x58, 0x1a, 0xd2, 0x81, 0x95, 0xcf, 0x80, 0xb7, 0xaf, 0x52, 0x9e, 0x71, 0xe7,
-	0x94, 0xe9, 0xe0, 0x40, 0x96, 0x4c, 0xcd, 0x91, 0x0b, 0x1d, 0x41, 0xef, 0x5b, 0x95, 0xbc, 0xdf,
-	0x63, 0x1d, 0xc1, 0xfc, 0x77, 0x0a, 0xd9, 0x32, 0x5c, 0x7a, 0x0b, 0xe7, 0x97, 0xce, 0xfe, 0x40,
-	0xef, 0x17, 0xb6, 0x69, 0x6c, 0x3b, 0x04, 0x78, 0xb2, 0x97, 0xc0, 0xc5, 0xe9, 0x00, 0xe3, 0x9c,
-	0xc5, 0x03, 0xf9, 0x0a, 0xb2, 0xf0, 0x04, 0xe5, 0xe3, 0x78, 0xb2, 0x79, 0x8e, 0x07, 0xa4, 0x05,
-	0x88, 0x2f, 0x48, 0x72, 0x3b, 0xf0, 0x01, 0xcd, 0x4b, 0x18, 0x2d, 0x1c, 0x1a, 0xc2, 0x3b, 0x65,
-	0xdf, 0xba, 0xf2, 0x3e, 0xb2, 0x4f, 0x58, 0xe3, 0x1d, 0xb2, 0xeb, 0x11, 0xff, 0x53, 0x6f, 0xfe,
-	0x05, 0x00, 0x00, 0xff, 0xff, 0x02, 0x31, 0xf4, 0xcc, 0x6c, 0x03, 0x00, 0x00,
+	// 254 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x5c, 0x90, 0x51, 0x4b, 0xc3, 0x30,
+	0x14, 0x85, 0xed, 0x5a, 0xdd, 0x7a, 0x87, 0x32, 0x2e, 0x13, 0xc2, 0x10, 0x29, 0x7d, 0xea, 0x53,
+	0x85, 0xf9, 0xa0, 0xec, 0x41, 0x05, 0xf1, 0x55, 0x66, 0xfe, 0x41, 0xb4, 0x17, 0x11, 0x6d, 0xd2,
+	0xe5, 0xa6, 0x83, 0xfe, 0x4e, 0xff, 0x90, 0x34, 0x6d, 0x98, 0xfa, 0x12, 0xee, 0x97, 0x9c, 0xc3,
+	0x39, 0xb9, 0x70, 0xde, 0x58, 0xe3, 0xcc, 0x95, 0x56, 0x8e, 0xfd, 0x51, 0x7a, 0xc6, 0xa4, 0x9f,
+	0xf3, 0xef, 0x08, 0xa6, 0x92, 0x76, 0x2d, 0xb1, 0xc3, 0x0b, 0x48, 0x55, 0x55, 0x59, 0x62, 0x26,
+	0x12, 0x51, 0x16, 0x15, 0xa9, 0x3c, 0x5c, 0xe0, 0x12, 0x8e, 0x69, 0x4f, 0xda, 0x89, 0x89, 0x7f,
+	0x19, 0x00, 0x11, 0x12, 0xd7, 0x35, 0x24, 0xe2, 0x2c, 0x2e, 0x52, 0xe9, 0x67, 0x7c, 0x80, 0xf9,
+	0xae, 0x25, 0xdb, 0x6d, 0x95, 0x55, 0x35, 0x8b, 0x24, 0x8b, 0x8b, 0xf9, 0xfa, 0xb2, 0xf4, 0xd9,
+	0x63, 0x56, 0xf9, 0x72, 0x10, 0x3c, 0x69, 0x67, 0x3b, 0xf9, 0xdb, 0xb2, 0xba, 0x83, 0xc5, 0x7f,
+	0x01, 0x2e, 0x20, 0xfe, 0xa4, 0x6e, 0xec, 0xd5, 0x8f, 0x7d, 0xa3, 0xbd, 0xfa, 0x6a, 0x29, 0x34,
+	0xf2, 0xb0, 0x99, 0xdc, 0x46, 0xf9, 0x06, 0x66, 0x92, 0xb8, 0x31, 0x9a, 0x69, 0x54, 0x7d, 0x54,
+	0xde, 0x39, 0x93, 0x03, 0xa0, 0x80, 0x69, 0x4d, 0xcc, 0xea, 0x3d, 0xb8, 0x03, 0xae, 0xef, 0x21,
+	0x79, 0x56, 0x8e, 0xf1, 0x06, 0x96, 0x5b, 0x6b, 0xde, 0x88, 0xf9, 0xd1, 0xd4, 0xb5, 0xd1, 0x61,
+	0x4b, 0xa7, 0x7f, 0x3e, 0xb2, 0x3a, 0x0b, 0x38, 0xc4, 0xe5, 0x47, 0xaf, 0x27, 0x7e, 0xbf, 0xd7,
+	0x3f, 0x01, 0x00, 0x00, 0xff, 0xff, 0xe3, 0x9a, 0x06, 0xdb, 0x78, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -348,16 +178,6 @@ var _ server.Option
 type NatsClient interface {
 	// 共处理方法
 	ProcessCommonRequest(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
-	// 获取权限列表
-	List(ctx context.Context, in *ListQuery, opts ...client.CallOption) (*Response, error)
-	// 根据 唯一 获取模板
-	Get(ctx context.Context, in *Nat, opts ...client.CallOption) (*Response, error)
-	// 创建模板
-	Create(ctx context.Context, in *Nat, opts ...client.CallOption) (*Response, error)
-	// 更新模板
-	Update(ctx context.Context, in *Nat, opts ...client.CallOption) (*Response, error)
-	// 删除模板
-	Delete(ctx context.Context, in *Nat, opts ...client.CallOption) (*Response, error)
 }
 
 type natsClient struct {
@@ -388,71 +208,11 @@ func (c *natsClient) ProcessCommonRequest(ctx context.Context, in *Request, opts
 	return out, nil
 }
 
-func (c *natsClient) List(ctx context.Context, in *ListQuery, opts ...client.CallOption) (*Response, error) {
-	req := c.c.NewRequest(c.serviceName, "Nats.List", in)
-	out := new(Response)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *natsClient) Get(ctx context.Context, in *Nat, opts ...client.CallOption) (*Response, error) {
-	req := c.c.NewRequest(c.serviceName, "Nats.Get", in)
-	out := new(Response)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *natsClient) Create(ctx context.Context, in *Nat, opts ...client.CallOption) (*Response, error) {
-	req := c.c.NewRequest(c.serviceName, "Nats.Create", in)
-	out := new(Response)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *natsClient) Update(ctx context.Context, in *Nat, opts ...client.CallOption) (*Response, error) {
-	req := c.c.NewRequest(c.serviceName, "Nats.Update", in)
-	out := new(Response)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *natsClient) Delete(ctx context.Context, in *Nat, opts ...client.CallOption) (*Response, error) {
-	req := c.c.NewRequest(c.serviceName, "Nats.Delete", in)
-	out := new(Response)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // Server API for Nats service
 
 type NatsHandler interface {
 	// 共处理方法
 	ProcessCommonRequest(context.Context, *Request, *Response) error
-	// 获取权限列表
-	List(context.Context, *ListQuery, *Response) error
-	// 根据 唯一 获取模板
-	Get(context.Context, *Nat, *Response) error
-	// 创建模板
-	Create(context.Context, *Nat, *Response) error
-	// 更新模板
-	Update(context.Context, *Nat, *Response) error
-	// 删除模板
-	Delete(context.Context, *Nat, *Response) error
 }
 
 func RegisterNatsHandler(s server.Server, hdlr NatsHandler, opts ...server.HandlerOption) {
@@ -465,24 +225,4 @@ type Nats struct {
 
 func (h *Nats) ProcessCommonRequest(ctx context.Context, in *Request, out *Response) error {
 	return h.NatsHandler.ProcessCommonRequest(ctx, in, out)
-}
-
-func (h *Nats) List(ctx context.Context, in *ListQuery, out *Response) error {
-	return h.NatsHandler.List(ctx, in, out)
-}
-
-func (h *Nats) Get(ctx context.Context, in *Nat, out *Response) error {
-	return h.NatsHandler.Get(ctx, in, out)
-}
-
-func (h *Nats) Create(ctx context.Context, in *Nat, out *Response) error {
-	return h.NatsHandler.Create(ctx, in, out)
-}
-
-func (h *Nats) Update(ctx context.Context, in *Nat, out *Response) error {
-	return h.NatsHandler.Update(ctx, in, out)
-}
-
-func (h *Nats) Delete(ctx context.Context, in *Nat, out *Response) error {
-	return h.NatsHandler.Delete(ctx, in, out)
 }
