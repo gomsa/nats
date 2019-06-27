@@ -25,7 +25,7 @@ stages:
         db.user: nats
         service.type: ClusterIP
         slave.replicas: "2"
-      name: nats-mariadb
+      name: nats
       targetNamespace: srv
 - name: Deploy
   steps:
