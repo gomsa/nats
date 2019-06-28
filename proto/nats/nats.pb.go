@@ -31,7 +31,7 @@ type Request struct {
 	Addressee string `protobuf:"bytes,1,opt,name=addressee,proto3" json:"addressee,omitempty"`
 	// 事件 配套魔板 默认发送方式
 	Event string `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`
-	// 留空调用模板默认设置 默认实现事件的类型 sms email wechat ...
+	// 留空调用模板默认设置 默认实现事件的类型 sms,email,wechat ...
 	Type string `protobuf:"bytes,3,opt,name=type,proto3" json:"type,omitempty"`
 	// 消息参数 验证码 等魔板参数参数
 	QueryParams          map[string]string `protobuf:"bytes,4,rep,name=queryParams,proto3" json:"queryParams,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
