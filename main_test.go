@@ -29,6 +29,6 @@ func TestProcessCommonRequest(t *testing.T) {
 	}
 	res := &npb.Response{}
 	err := h.ProcessCommonRequest(context.TODO(), req, res)
-	// fmt.Println(req, res, err)
+	fmt.Println(req, res, err)
 	t.Log(req, res, err)
 }
