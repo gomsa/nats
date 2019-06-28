@@ -20,12 +20,15 @@ func main() {
 	)
 	srv.Init()
 
-	// 消息事件服务实现
-	nrepo := &service.SmsHandler{"aliyun"}
-	npb.RegisterNatsHandler(srv.Server(), &hander.Nats{nrepo.NewHandler()})
+	repo := &service.TemplateRepository{db.DB}
+	tpb.RegisterTemplatesHandler(srv.Server(), &hander.Template{repo})
 
-	trepo := &service.TemplateRepository{db.DB}
-	tpb.RegisterTemplatesHandler(srv.Server(), &hander.Template{trepo})
+	// 消息事件服务实现
+	sms := &service.SmsHandler{"aliyun"}
+	npb.RegisterNatsHandler(srv.Server(), &hander.Nats{
+		Repo : repo,
+		Sms : sms.NewHandler(),
+	})
 	// Run the server
 	if err := srv.Run(); err != nil {
 		log.Log(err)

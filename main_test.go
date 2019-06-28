@@ -2,12 +2,12 @@ package main
 
 import (
 	"context"
-	// "fmt"
 	"testing"
 
 	_ "github.com/gomsa/nats/database/migrations"
 	"github.com/gomsa/nats/hander"
 	npb "github.com/gomsa/nats/proto/nats"
+	db "github.com/gomsa/nats/providers/database"
 	"github.com/gomsa/nats/service"
 	"github.com/gomsa/tools/env"
 )
@@ -17,12 +17,12 @@ func TestProcessCommonRequest(t *testing.T) {
 	nrepo := &service.SmsHandler{
 		env.Getenv("SMS_DRIVE", "aliyun"),
 	}
-
-	h := hander.Nats{nrepo.NewHandler()}
+	repo := &service.TemplateRepository{db.DB}
+	h := hander.Nats{Repo:repo,Sms:nrepo.NewHandler()}
 	req := &npb.Request{
 		Addressee: `13954386521`,
-		Event:     `123456`,
-		Type:      []string{`sms`},
+		Event:     `register_verify`,
+		Type:      `sms`,
 		QueryParams: map[string]string{
 			`code`: `123456`,
 		},

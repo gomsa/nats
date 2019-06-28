@@ -2,20 +2,18 @@ package sms
 
 import (
 	// 公共引入
-
 	"encoding/json"
 	"errors"
-
+	
 	"github.com/micro/go-micro/util/log"
 
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk"
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
+	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/responses"
 
 	pb "github.com/gomsa/nats/proto/nats"
+	tpd "github.com/gomsa/nats/proto/template"
 )
-
-// ret 返回请求
-var ret map[string]string
 
 // Aliyun 阿里云驱动
 type Aliyun struct {
@@ -23,58 +21,74 @@ type Aliyun struct {
 	AccessKeyId     string
 	AccessKeySecret string
 	SignName        string
-	TemplateCode    string
-}
-
-func (repo *Aliyun) Event(req *pb.Request) {
-
 }
 
 // Send 获取所有消息事件信息
-func (repo *Aliyun) Send(req *pb.Request) (res *pb.Response, err error) {
+func (srv *Aliyun) Send(req *pb.Request, t *tpd.Template) (valid bool, err error) {
 	// 创建连接
-	client, err := sdk.NewClientWithAccessKey(
-		repo.RegionId,
-		repo.AccessKeyId,
-		repo.AccessKeySecret,
-	)
+	client, err := srv.client()
 	if err != nil {
 		log.Log(err)
-		return res, err
+		return false, err
 	}
+	// 请求参数构建
+	request, err := srv.request(req, t)
+	if err != nil {
+		log.Log(err)
+		return false, err
+	}
+	// 请求
+	response, err := client.ProcessCommonRequest(request)
+
+	if err != nil {
+		log.Log(err)
+		return false, err
+	}
+	
+	// 返回数据处理
+	valid, err = srv.response(response)
+	if err != nil {
+		log.Log(err)
+	}
+	return valid, err
+}
+
+// client 创建阿里云连接
+func (srv *Aliyun) client() (client *sdk.Client, err error) {
+	// 创建连接
+	return sdk.NewClientWithAccessKey(
+		srv.RegionId,
+		srv.AccessKeyId,
+		srv.AccessKeySecret,
+	)
+}
+
+// request 构建阿里云请求参数
+func (srv *Aliyun) request(req *pb.Request, t *tpd.Template) (request *requests.CommonRequest, err error) {
 	// 配置参数
-	request := requests.NewCommonRequest()
+	request = requests.NewCommonRequest()
 	request.Method = "POST"
 	request.Scheme = "https"
 	request.Domain = "dysmsapi.aliyuncs.com"
 	request.Version = "2017-05-25"
 	request.ApiName = "SendSms"
 	request.QueryParams["PhoneNumbers"] = req.Addressee
-	request.QueryParams["SignName"] = repo.SignName
-	request.QueryParams["TemplateCode"] = repo.TemplateCode
+	request.QueryParams["SignName"] = srv.SignName
+	request.QueryParams["TemplateCode"] = t.TemplateCode
 	queryParams, err := json.Marshal(req.QueryParams)
-	if err != nil {
-		log.Log(err)
-		return res, err
-	}
 	request.QueryParams["TemplateParam"] = string(queryParams)
-
-	// 请求
-	response, err := client.ProcessCommonRequest(request)
+	return
+}
+// response 返回数据处理
+func (srv *Aliyun) response(response *responses.CommonResponse) (valid bool, err error) {
+	// res 返回请求
+	res := map[string]string{}
+	err = json.Unmarshal([]byte(response.GetHttpContentString()), &res)
 	if err != nil {
-		log.Log(err)
-		return res, err
+		return false, err
 	}
-	// 返回请求数据
-	err = json.Unmarshal([]byte(response.GetHttpContentString()), ret)
-	if err != nil {
-		log.Log(err)
-		return res, err
+	if res["Code"] != "OK" {
+		return false, errors.New(res["Message"])
 	}
-	if ret["Code"] == "OK" {
-		res.Valid = true
-	} else {
-		err = errors.New(ret["Message"])
-	}
-	return res, err
+	return true, err
 }

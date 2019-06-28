@@ -20,8 +20,8 @@ func template() {
 			event varchar(32) NOT NULL,
 			name varchar(64) DEFAULT NULL,
 			type varchar(64) DEFAULT NULL,
-			templateCode varchar(128) DEFAULT NULL,
-			templateValue varchar(128) DEFAULT NULL,
+			template_code varchar(128) DEFAULT NULL,
+			template_value varchar(128) DEFAULT NULL,
 			created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			xxx_unrecognized varbinary(255) DEFAULT NULL,
@@ -36,6 +36,6 @@ func template() {
 // seeds 填充文件
 func seeds() {
 	db.DB.Exec(`
-		INSERT INTO templates ( event, name, type, templateCode, templateValue ) VALUES ('register_verify','用户注册验证码','sms','SMS_135275049','')
+		INSERT INTO templates ( event, name, type, template_code, template_value ) VALUES ('register_verify','用户注册验证码','sms','SMS_135275049','')
 	`)
 }

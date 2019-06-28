@@ -27,7 +27,7 @@ message Template{
     int64 id = 1;
     string event = 2;               // 事件 注册信息 登录信息
     string name = 3;                // 事件名称 方法 比如发短信 发邮件
-    repeated string type= 4;        // 默认实现事件的类型 sms email wechat ...
+    string type= 4;        // 默认实现事件的类型 sms email wechat ...
     string templateCode = 5;        // 模板代码 用于一些不能是使用自制模板的服务商
     string templateValue = 6;       // 模板
 }
