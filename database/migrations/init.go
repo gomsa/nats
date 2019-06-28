@@ -10,7 +10,7 @@ func init() {
 	seeds()
 }
 
-// user 用户数据迁移
+// template 模板数据迁移
 func template() {
 	template := &pd.Template{}
 	if !db.DB.HasTable(&template) {
