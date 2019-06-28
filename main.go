@@ -6,6 +6,7 @@ import (
 	"github.com/micro/go-micro/util/log"
 	k8s "github.com/micro/kubernetes/go/micro"
 
+	_ "github.com/gomsa/nats/database/migrations"
 	npb "github.com/gomsa/nats/proto/nats"
 	tpb "github.com/gomsa/nats/proto/template"
 	db "github.com/gomsa/nats/providers/database"
