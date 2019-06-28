@@ -27,9 +27,9 @@ func (s *SmsHandler) NewHandler() (handler Sms) {
 	case "aliyun":
 		handler = &sms.Aliyun{
 			RegionId:        "default",
-			AccessKeyId:     env.Getenv("SMS_KEY_ID", "LTAI8sBGWa9JOHXX"),
-			AccessKeySecret: env.Getenv("SMS_KEY_SECRET", "NtQPsr1iNr6H9CBfv7lNNqNk6mkoEz"),
-			SignName:        env.Getenv("SMS_SIGN_NAME", "汇丰采驿"),
+			AccessKeyId:     env.Getenv("SMS_KEY_ID", ""),
+			AccessKeySecret: env.Getenv("SMS_KEY_SECRET", ""),
+			SignName:        env.Getenv("SMS_SIGN_NAME", "阿里云短信测试专用"),
 		}
 	}
 	return handler
