@@ -3,6 +3,8 @@ package service
 import (
 	// 公共引入
 
+	"fmt"
+
 	"github.com/gomsa/tools/env"
 
 	pb "github.com/gomsa/nats/proto/nats"
@@ -22,7 +24,7 @@ type SmsHandler struct {
 }
 
 // NewHandler 使用对应驱动使用 sms
-func (s *SmsHandler) NewHandler() (handler Sms) {
+func (s *SmsHandler) NewHandler() (handler Sms, err error) {
 	switch s.Drive {
 	case "aliyun":
 		handler = &sms.Aliyun{
@@ -31,6 +33,8 @@ func (s *SmsHandler) NewHandler() (handler Sms) {
 			AccessKeySecret: env.Getenv("SMS_KEY_SECRET", ""),
 			SignName:        env.Getenv("SMS_SIGN_NAME", "阿里云短信测试专用"),
 		}
+	default:
+		return handler, fmt.Errorf("未找 %s SMS 驱动", s.Drive)
 	}
-	return handler
+	return handler, err
 }

@@ -12,6 +12,7 @@ import (
 	db "github.com/gomsa/nats/providers/database"
 	"github.com/gomsa/nats/hander"
 	"github.com/gomsa/nats/service"
+	"github.com/gomsa/tools/env"
 )
 
 func main() {
@@ -25,10 +26,16 @@ func main() {
 	tpb.RegisterTemplatesHandler(srv.Server(), &hander.Template{repo})
 
 	// 消息事件服务实现
-	sms := &service.SmsHandler{"aliyun"}
+	smsHander := &service.SmsHandler{
+		env.Getenv("SMS_DRIVE", "aliyun"),
+	}
+	sms,err := smsHander.NewHandler()
+	if err != nil {
+		log.Log(err)
+	}
 	npb.RegisterNatsHandler(srv.Server(), &hander.Nats{
 		Repo : repo,
-		Sms : sms.NewHandler(),
+		Sms : sms,
 	})
 	// Run the server
 	if err := srv.Run(); err != nil {
