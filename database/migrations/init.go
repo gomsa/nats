@@ -36,6 +36,6 @@ func template() {
 // seeds 填充文件
 func seeds() {
 	db.DB.Exec(`
-		INSERT INTO templates ( event, name, type, template_code, template_value ) VALUES ('register_verify','用户注册验证码','sms','SMS_135275049','')
+		INSERT INTO templates ( event, name, type, template_code, template_value ) VALUES ('register_verify','用户注册验证码','sms','453946','')
 	`)
 }
