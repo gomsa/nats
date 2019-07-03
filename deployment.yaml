@@ -54,15 +54,30 @@ spec:
                   key: mariadb-password
                   name: nats-mariadb
             - name: SMS_DRIVE
-              value: "aliyun"
-            - name: SMS_SIGN_NAME
+              value: "cloopen"
+            - name: SMS_CLOOPEN_SID
+              valueFrom:
+                secretKeyRef:
+                  key: account-sid
+                  name: cloopen
+            - name: SMS_CLOOPEN_APP_ID
+              valueFrom:
+                secretKeyRef:
+                  key: app-id
+                  name: cloopen
+            - name: SMS_CLOOPEN_ACCOUNT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: account-token
+                  name: cloopen
+            - name: SMS_ALIYUN_SIGN_NAME
               value: "阿里云短信测试专用"
-            - name: SMS_KEY_ID
+            - name: SMS_ALIYUN_KEY_ID
               valueFrom:
                 secretKeyRef:
                   key: access-key-id
                   name: aliyun
-            - name: SMS_KEY_SECRET
+            - name: SMS_ALIYUN_KEY_SECRET
               valueFrom:
                 secretKeyRef:
                   key: access-key-secret

@@ -17,8 +17,8 @@ import (
 
 // Aliyun 阿里云驱动
 type Aliyun struct {
-	RegionId        string
-	AccessKeyId     string
+	RegionID        string
+	AccessKeyID     string
 	AccessKeySecret string
 	SignName        string
 }
@@ -57,8 +57,8 @@ func (srv *Aliyun) Send(req *pb.Request, t *tpd.Template) (valid bool, err error
 func (srv *Aliyun) client() (client *sdk.Client, err error) {
 	// 创建连接
 	return sdk.NewClientWithAccessKey(
-		srv.RegionId,
-		srv.AccessKeyId,
+		srv.RegionID,
+		srv.AccessKeyID,
 		srv.AccessKeySecret,
 	)
 }

@@ -7,6 +7,7 @@ import (
 	pb "github.com/gomsa/nats/proto/nats"
 	tpd "github.com/gomsa/nats/proto/template"
 	"github.com/gomsa/nats/service"
+	"github.com/micro/go-micro/util/log"
 )
 
 // Nats 消息事件结构
@@ -33,6 +34,9 @@ func (srv *Nats) ProcessCommonRequest(ctx context.Context, req *pb.Request, res 
 	valid := false
 	if srv.InSliceString(Type, "sms") {
 		valid, err = srv.Sms.Send(req, template)
+		if err != nil {
+			log.Log(err)
+		}
 	}
 	res.Valid = valid
 	return
